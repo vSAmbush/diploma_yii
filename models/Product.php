@@ -18,6 +18,8 @@ class Product extends ActiveRecord
 
     public $mark;
 
+    public $provider;
+
     /**
      * @return string table name
      */
@@ -31,9 +33,17 @@ class Product extends ActiveRecord
      * @return Product[]|array|ActiveRecord[]
      */
     public static function getProductsByCode($code) {
-        return self::find()
+        $products = self::find()
             ->where(['code' => $code])
             ->all();
+
+        for($i = 0; $i < count($products); $i++) {
+            $products[$i]->type = Type::findTypeById($products[$i]->getIdType());
+            $products[$i]->mark = ($products[$i]->getIdMark()) ? Mark::findMarkById($products[$i]->getIdMark()) : null;
+            $products[$i]->provider = Provider::findProviderById($products[$i]->getIdProvider());
+        }
+
+        return $products;
     }
 
     /**
@@ -41,12 +51,12 @@ class Product extends ActiveRecord
      * @return null|static
      */
     public static function getProductById($id) {
-        return (new Query())
-            ->select('code, products.name, org_name')
-            ->from('products')
-            ->where(['products.id' => $id])
-            ->innerJoin('providers', 'id_provider = providers.id')
-            ->all();
+        $product = self::findOne(['id' => $id]);
+        $product->type = Type::findTypeById($product->getIdType());
+        $product->mark = ($product->getIdMark()) ? Mark::findMarkById($product->getIdMark()) : null;
+        $product->provider = Provider::findProviderById($product->getIdProvider());
+
+        return $product;
     }
 
     /**
@@ -78,7 +88,28 @@ class Product extends ActiveRecord
     }
 
     /**
-     * @return mixed
+     * @return integer
+     */
+    public function getIdType() {
+        return $this->id_type;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getIdMark() {
+        return $this->id_mark;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getIdProvider() {
+        return $this->id_provider;
+    }
+
+    /**
+     * @return Type
      */
     public function getType()
     {
@@ -86,10 +117,17 @@ class Product extends ActiveRecord
     }
 
     /**
-     * @return mixed
+     * @return Mark
      */
     public function getMark()
     {
         return $this->mark;
+    }
+
+    /**
+     * @return Provider
+     */
+    public function getProvider() {
+        return $this->provider;
     }
 }

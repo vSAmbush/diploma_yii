@@ -9,6 +9,7 @@ use app\helpers\SignUpForm;
 use app\models\Cart;
 use app\models\Mark;
 use app\models\Order;
+use app\models\OrderItem;
 use app\models\Product;
 use app\models\Type;
 use Yii;
@@ -140,17 +141,19 @@ class SiteController extends Controller
         //handling 'buy' button
         $id_product = Yii::$app->request->post('buy');
         if(isset($id_product)) {
-            if(!($row = Cart::isRowExists($id_product))) {
-                $cart = new Cart();
-                $cart->id_user = Yii::$app->user->identity->getId();
-                $cart->id_product = $id_product;
-                $cart->amount = (Yii::$app->request->post('product_amount'));
-                $cart->save();
+            if(!($row = OrderItem::isRowExists($id_product))) {
+                $order_item = new OrderItem();
+                $order_item->id_user = Yii::$app->user->identity->getId();
+                $order_item->id_product = $id_product;
+                $order_item->amount = (Yii::$app->request->post('product_amount'));
+                $order_item->cost = Product::getProductById($id_product)->getCost() * $order_item->amount;
+                $order_item->status = 0;
+                $order_item->save();
             }
             else {
-                $cart = $row;
-                $cart->amount = Yii::$app->request->post('product_amount');;
-                $cart->save();
+                $order_item = $row;
+                $order_item->amount = Yii::$app->request->post('product_amount');;
+                $order_item->save();
             }
         }
 
@@ -175,25 +178,21 @@ class SiteController extends Controller
         //handling 'buy' button
         $id_product = Yii::$app->request->post('buy');
         if(isset($id_product)) {
-            if(!($row = Cart::isRowExists($id_product))) {
-                $cart = new Cart();
-                $cart->id_user = Yii::$app->user->identity->getId();
-                $cart->id_product = $id_product;
-                $cart->amount = (Yii::$app->request->post('product_amount'));
-                $cart->save();
+            if(!($row = OrderItem::isRowExists($id_product))) {
+                $order_item = new OrderItem();
+                $order_item->id_user = Yii::$app->user->identity->getId();
+                $order_item->id_product = $id_product;
+                $order_item->amount = (Yii::$app->request->post('product_amount'));
+                $order_item->cost = Product::getProductById($id_product)->getCost() * $order_item->amount;
+                $order_item->status = 0;
+                $order_item->save();
             }
             else {
-                $cart = $row;
-                $cart->amount = Yii::$app->request->post('product_amount');;
-                $cart->save();
+                $order_item = $row;
+                $order_item->amount = Yii::$app->request->post('product_amount');;
+                $order_item->save();
             }
         }
-
-        for($i = 0; $i < count($products); $i++) {
-            $products[$i]->mark = (Mark::findMarkById($products[$i]->id_mark)) ? Mark::findMarkById($products[$i]->id_mark)->getImgPath() : '';
-            $products[$i]->type = Type::findTypeById($products[$i]->id_type)->getImgPath();
-        }
-
         return $this->render('search', [
             'products' => $products,
         ]);
@@ -227,14 +226,13 @@ class SiteController extends Controller
 
         $orders = Order::getOrders();
 
-        $order_products = [];
+        $total = [];
         $products = [];
-        for ($i = 0; $i < count($orders); $i++) {
-            $order_products[] = json_decode($orders[$i]['products'], true);
-            for($j = 0; $j < count($order_products[$i]); $j++) {
-                $products[$i][$j] = Product::getProductById($order_products[$i][$j]['id_product'])[0];
-                $products[$i][$j]['amount'] = $order_products[$i][$j]['amount'];
-            }
+        for($i = 0; $i < count($orders); $i++) {
+            $total[$i] = 0;
+            $products[] = Order::getOrderByOrderNumber($orders[$i]->getOrderNumber());
+            for($j = 0; $j < count($products[$i]); $j++)
+                $total[$i] += $products[$i][$j]->getOrderItem()->getCost();
         }
 
         if(Yii::$app->user->isGuest || Yii::$app->user->identity->getStatus()) {
@@ -243,6 +241,7 @@ class SiteController extends Controller
         else {
             return $this->render('purchases', [
                 'orders' => $orders,
+                'total' => $total,
                 'products' => $products,
             ]);
         }
@@ -250,44 +249,49 @@ class SiteController extends Controller
 
     public function actionCart() {
 
-        $products = Cart::getCart(Yii::$app->user->identity->getId());
+        $order_items = OrderItem::getCart(Yii::$app->user->identity->getId());
 
         $total = 0;
-        for($i = 0; $i < count($products); $i++) {
-            if($products[$i]['amount'] != 1)
-                $products[$i]['cost'] *= $products[$i]['amount'];
-            $total += $products[$i]['cost'];
+        for($i = 0; $i < count($order_items); $i++) {
+            if($order_items[$i]->getAmount() != 1)
+                $order_items[$i]->cost *= $order_items[$i]->getAmount();
+            $total += $order_items[$i]->getCost();
         }
 
         if(Yii::$app->request->post('remove')) {
-            Cart::deleteItem(Yii::$app->request->post('remove'));
+            OrderItem::deleteItem(Yii::$app->request->post('remove'));
             return $this->refresh();
         }
 
         if(Yii::$app->request->post('clear')) {
-            Cart::clearCart(Yii::$app->user->identity->getId());
+            OrderItem::clearCart(Yii::$app->user->identity->getId());
             return $this->refresh();
         }
 
         if(Yii::$app->request->post('checkout')) {
-            $order = new Order();
-            $temp = [];
-            for($i = 0; $i < count($products); $i++) {
-                $temp[$i]['id_product'] = $products[$i]['id_product'];
-                $temp[$i]['amount'] = Yii::$app->request->post('product_amount'.$i);
+
+            $last = (Order::getLastOrderNumber()) ? (Order::getLastOrderNumber() + 1) : 1;
+            for($i = 0; $i < count($order_items); $i++) {
+                $order_items[$i]->amount = Yii::$app->request->post('product_amount'.$i);
+                $order_items[$i]->cost = $order_items[$i]->getProduct()->getCost() * $order_items[$i]->getAmount();
+                $order_items[$i]->status = 1;
+                $order_items[$i]->save();
+
+                $order = new Order();
+
+                $order->id_user = Yii::$app->user->identity->getId();
+                $order->order_number = $last;
+                $order->id_order_item = $order_items[$i]->getId();
+                $order->status = 0;
+                $order->save();
             }
-            $order->id_user = Yii::$app->user->identity->getId();
-            $order->products = json_encode($temp);
-            $order->cost = Yii::$app->request->post('total_input');
-            $order->status = 0;
-            $order->save();
-            Cart::clearCart($order->id_user);
+            //OrderItem::clearCart($order->id_user);
             return $this->refresh();
         }
 
         if(!Yii::$app->user->isGuest) {
             return $this->render('cart', [
-                'products' => $products,
+                'order_items' => $order_items,
                 'total' => $total,
             ]);
         } else {

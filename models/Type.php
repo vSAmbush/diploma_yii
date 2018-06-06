@@ -35,7 +35,7 @@ class Type extends ActiveRecord
      * @return Mark[]|Type[]|array|ActiveRecord[]
      */
     public static function getAllTypes() {
-        return self::find()->indexBy('id')->all();
+        return self::find()->all();
     }
 
     /**

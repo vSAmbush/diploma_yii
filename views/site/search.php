@@ -26,11 +26,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::beginForm();?>
                 <tr class="h4">
                     <?php if($products[$i]->getMark()) : ?>
-                        <td class="col-md-1 text-center"><?= Html::img($products[$i]->getMark(), [
+                        <td class="col-xs-1 text-center"><?= Html::img($products[$i]->getMark()->getImgPath(), [
                                 'width' => '50%',
                             ]); ?></td>
+                    <?php else: ?>
+                    <td class="col-xs-1"></td>
                     <?php endif; ?>
-                    <td class="col-md-1 text-center"><?= Html::img($products[$i]->getType(), [
+                    <td class="col-md-1 text-center"><?= Html::img($products[$i]->getType()->getImgPath(), [
                             'width' => '50%',
                         ]); ?></td>
                     <td class="col-md-1 bg-info">Code:</td>

@@ -15,6 +15,10 @@ use yii\db\Query;
 
 class Order extends ActiveRecord
 {
+    public $orderItem;
+
+    public $user;
+
     /**
      * @return string table name
      */
@@ -34,15 +38,100 @@ class Order extends ActiveRecord
     }
 
     /**
-     * Getting orders
+     * Getting all orders
      *
-     * @return array
+     * @return Order[]|OrderItem[]|array|ActiveRecord[]
      */
     public static function getOrders() {
-        return (new Query())
-            ->select('first_name, second_name, products, cost, orders.created_at, orders.updated_at')
-            ->from('orders')
-            ->innerJoin('users', 'id_user = users.id')
+        $orders = self::find()->where(['status' => 0])->groupBy('order_number')->all();
+
+        for($i = 0; $i < count($orders); $i++) {
+            $orders[$i]->orderItem = OrderItem::findOrderItemByID($orders[$i]->getIdOrderItem());
+            $orders[$i]->user = User::findIdentity($orders[$i]->getIdUser());
+        }
+
+        return $orders;
+    }
+
+    /**
+     * @param $order_number
+     * @return Order[]|OrderItem[]|array|ActiveRecord[]
+     */
+    public static function getOrderByOrderNumber($order_number) {
+        $orders = self::find()
+            ->where(['order_number' => $order_number])
             ->all();
+
+        for($i = 0; $i < count($orders); $i++) {
+            $orders[$i]->orderItem = OrderItem::findOrderItemById($orders[$i]->getIdOrderItem());
+            $orders[$i]->user = User::findIdentity($orders[$i]->getIdUser());
+        }
+
+        return $orders;
+    }
+
+    /**
+     * Getting last order
+     *
+     * @return integer
+     */
+    public static function getLastOrderNumber() {
+        return self::find()->max('order_number');
+    }
+
+    /**
+     * @return integer
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getIdUser() {
+        return $this->id_user;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getIdOrderItem() {
+        return $this->id_order_item;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getStatus() {
+        return $this->status;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getOrderNumber() {
+        return $this->order_number;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser() {
+        return $this->user;
+    }
+
+    /**
+     * @return OrderItem
+     */
+    public function getOrderItem() {
+        return $this->orderItem;
     }
 }

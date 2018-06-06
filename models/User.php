@@ -93,10 +93,17 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
-     * @return string first_name
+     * @return string first name
      */
-    public function getName() {
+    public function getFirstName() {
         return $this->first_name;
+    }
+
+    /**
+     * @return string second name
+     */
+    public function getSecondName() {
+        return $this->second_name;
     }
 
     /**

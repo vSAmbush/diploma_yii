@@ -81,4 +81,22 @@ $(document).ready(function () {
        $(temp).toggleClass('d-none');
        $(this).toggleClass('active');
     });
+
+    //accept purchase item
+    $('.checker').click(function () {
+        var ind = $(this).attr('id');
+        ind = ind.replace('check', '');
+        var temp = '#item' + ind;
+        $(temp).removeClass('bg-danger');
+        $(temp).addClass('bg-success');
+    });
+
+    //decline purchase item
+    $('.decliner').click(function () {
+        var ind = $(this).attr('id');
+        ind = ind.replace('decline', '');
+        var temp = '#item' + ind;
+        $(temp).removeClass('bg-success');
+        $(temp).addClass('bg-danger');
+    });
 });

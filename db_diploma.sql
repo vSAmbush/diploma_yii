@@ -47,34 +47,41 @@ foreign key (id_mark) references marks (id),
 foreign key (id_provider) references providers (id))
 engine = InnoDB;
 
-#Корзина
-create table cart (id int primary key auto_increment,
+#Часть заказа
+create table order_item (id int primary key auto_increment,
 id_user int,
 id_product int,
+cost float,
 amount int,
+status int,
 foreign key (id_user) references users (id),
 foreign key (id_product) references products (id))
 engine = InnoDB;
 
 #Заказы
 create table orders (id int primary key auto_increment,
+order_number int,
 id_user int,
-products varchar(2048),
-cost float,
+id_order_item int,
 created_at long,
 updated_at long,
 status int,
+foreign key (id_order_item) references order_item (id),
 foreign key (id_user) references users (id))
 engine = InnoDB;
 
 #Закупки
 create table purchases (id int primary key auto_increment,
 id_user int,
-products varchar(2048),
-providers varchar(2048),
+purchase_number int,
+id_order int,
+id_provider int,
 cost float,
 created_at long,
 updated_at long,
+status int,
+foreign key (id_order) references orders (id),
+foreign key (id_provider) references providers (id),
 foreign key (id_user) references users (id))
 engine = InnoDB; 
 

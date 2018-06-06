@@ -10,10 +10,19 @@ namespace app\models;
 
 
 use yii\db\ActiveRecord;
-use yii\db\Query;
 
-class Cart extends ActiveRecord
+class OrderItem extends ActiveRecord
 {
+    public $product;
+
+    /**
+     * @return string
+     */
+    public static function tableName()
+    {
+        return "order_item";
+    }
+
     /**
      * Validation rules
      *
@@ -24,6 +33,16 @@ class Cart extends ActiveRecord
         return [
           ['id_product', 'unique'],
         ];
+    }
+
+    /**
+     * @param $id
+     * @return null|static
+     */
+    public static function findOrderItemById($id) {
+        $item = self::findOne(['id' => $id]);
+        $item->product = Product::getProductById($item->getIdProduct());
+        return $item;
     }
 
     /**
@@ -40,16 +59,18 @@ class Cart extends ActiveRecord
      * Getting all bought products
      *
      * @param $id_user
-     * @return Cart[]|array|ActiveRecord[]
+     * @return OrderItem[]|array|ActiveRecord[]
      */
     public static function getCart($id_user) {
-        return (new Query())
-            ->select('cart.id, id_user, id_product, amount, code, name, cost, img_path, id_provider')
-            ->from('cart')
-            ->innerJoin('products', 'id_product = products.id')
-            ->innerJoin('types', 'id_type = types.id')
-            ->where(['id_user' => $id_user])
+        $order_items = self::find()
+            ->where(['id_user' => $id_user, 'status' => 0])
             ->all();
+        for($i = 0; $i < count($order_items); $i++) {
+            $order_items[$i]->product = Product::getProductById($order_items[$i]->getIdProduct());
+            $order_items[$i]->cost = $order_items[$i]->product->getCost();
+        }
+
+        return $order_items;
     }
 
     /**
@@ -100,5 +121,19 @@ class Cart extends ActiveRecord
      */
     public function getAmount() {
         return $this->amount;
+    }
+
+    /**
+     * @return float
+     */
+    public function getCost() {
+        return $this->cost;
+    }
+
+    /**
+     * @return Product
+     */
+    public function getProduct() {
+        return $this->product;
     }
 }
