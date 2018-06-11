@@ -38,7 +38,7 @@ AppAsset::register($this);
 
     if(!Yii::$app->user->isGuest) {
         $menuItems = [
-            (Yii::$app->user->identity->getStatus() == 0) ? ['label' => 'Purchases', 'url' => ['/site/purchases']] : '',
+            (Yii::$app->user->identity->getStatus() == 0) ? ['label' => 'Make a purchase', 'url' => ['/site/purchases']] : '',
             ['label' => 'Products', 'url' => ['/site/products']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
             '<li>'.Html::a('<span class="glyphicon glyphicon-shopping-cart"></span> Cart', ['/site/cart']).'</li>',
