@@ -1,8 +1,10 @@
 <?php
 
 /* @var $this yii\web\View */
+/* @var $src mixed */
 
 $this->title = 'Diploma';
+
 ?>
 <div class="site-index">
 
@@ -14,13 +16,13 @@ $this->title = 'Diploma';
 
                 for($i = 0; $i < 3; $i++) {
                     if($i === 1)
-                        echo \yii\helpers\Html::img('/images/gear'.$i.'.png', [
+                        echo \yii\helpers\Html::img($src.'/images/gear'.$i.'.png', [
                                 'width' => '20%',
                                 'height' => '20%',
                                 'class' => 'gear-left'
                             ]).' ';
                     else
-                        echo \yii\helpers\Html::img('/images/gear'.$i.'.png', [
+                        echo \yii\helpers\Html::img($src.'/images/gear'.$i.'.png', [
                             'width' => '20%',
                             'height' => '20%',
                             'class' => 'gear-right'

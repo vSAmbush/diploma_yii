@@ -13,6 +13,7 @@ use app\models\OrderItem;
 use app\models\Product;
 use app\models\Type;
 use Yii;
+use yii\base\Module;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
@@ -20,6 +21,15 @@ use yii\filters\VerbFilter;
 
 class SiteController extends Controller
 {
+    public $src;
+
+    public function __construct($id, Module $module, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->src = explode('?', $_SERVER['REQUEST_URI'])[0];
+        $this->src = str_replace('/index.php', '', $this->src);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -69,7 +79,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->render('index', [
+            'src' => $this->src,
+        ]);
     }
 
     /**
@@ -163,6 +175,7 @@ class SiteController extends Controller
             'types' => $product_viewer->getTypes(),
             'products' => $product_viewer->getProducts(),
             'others' => $product_viewer->getOthers(),
+            'src' => $this->src,
         ]);
     }
 
@@ -230,7 +243,7 @@ class SiteController extends Controller
         $products = [];
         for($i = 0; $i < count($orders); $i++) {
             $total[$i] = 0;
-            $products[] = Order::getOrderByOrderNumber($orders[$i]->getOrderNumber());
+            $products[] = Order::getOrdersByOrderNumber($orders[$i]->getOrderNumber());
             for($j = 0; $j < count($products[$i]); $j++)
                 $total[$i] += $products[$i][$j]->getOrderItem()->getCost();
         }

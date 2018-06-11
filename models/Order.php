@@ -57,7 +57,7 @@ class Order extends ActiveRecord
      * @param $order_number
      * @return Order[]|OrderItem[]|array|ActiveRecord[]
      */
-    public static function getOrderByOrderNumber($order_number) {
+    public static function getOrdersByOrderNumber($order_number) {
         $orders = self::find()
             ->where(['order_number' => $order_number])
             ->all();

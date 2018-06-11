@@ -136,4 +136,11 @@ class OrderItem extends ActiveRecord
     public function getProduct() {
         return $this->product;
     }
+
+    /**
+     * @return integer
+     */
+    public function getStatus() {
+        return $this->status;
+    }
 }

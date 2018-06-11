@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
                     <?= $form->field($model, 'name')->textInput([
-                        'value' => !Yii::$app->user->isGuest ? Yii::$app->user->identity->getName() : '',
+                        'value' => !Yii::$app->user->isGuest ? Yii::$app->user->identity->getFirstName() : '',
                         ]) ?>
 
                     <?= $form->field($model, 'email')->textInput([

@@ -6,6 +6,7 @@
 /* @var $marks mixed */
 /* @var $products \app\models\Product[]|\app\models\Type[]|array|\yii\db\ActiveRecord[] */
 /* @var $others \app\models\Product[]|\app\models\Type[]|array|\yii\db\ActiveRecord[] */
+/* @var $src mixed */
 
 use yii\helpers\Html;
 
@@ -38,7 +39,7 @@ $this->params['breadcrumbs'][] = [
         <?= Html::endForm(); ?><br>
         <?php for($i = 0; $i < count($others); $i++): ?>
             <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['site/products', 'other' => $others[$i]->getId()]);?>">
-                <?= Html::img($others[$i]->getImgPath(), [
+                <?= Html::img($src.$others[$i]->getImgPath(), [
                     'width' => '50px',
                     'height' => '50px',
                 ]);?>
@@ -48,7 +49,7 @@ $this->params['breadcrumbs'][] = [
         <br/><br/>
         <?php for($i = 0; $i < count($marks); $i++) : ?>
             <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['site/products', 'mark' => $marks[$i]->getId()]);?>">
-                <?= Html::img($marks[$i]->getImgPath(), [
+                <?= Html::img($src.$marks[$i]->getImgPath(), [
                     'width' => '150px',
                     'height' => '150px',
                     'class' => 'panel',
@@ -68,7 +69,7 @@ $this->params['breadcrumbs'][] = [
             if(!$product_viewer->isTypeSelected && !$product_viewer->isOtherSelected):
                 for($i = 0; $i < count($types); $i++) : ?>
                     <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['site/products', 'mark' => $product_viewer->currentMark, 'type' => $types[$i]->getId()]);?>">
-                        <?= Html::img($types[$i]->getImgPath(), [
+                        <?= Html::img($src.$types[$i]->getImgPath(), [
                             'width' => '150px',
                             'height' => '150px',
                             'class' => 'panel',
