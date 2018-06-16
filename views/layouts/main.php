@@ -38,12 +38,12 @@ AppAsset::register($this);
 
     if(!Yii::$app->user->isGuest) {
         $menuItems = [
-            (Yii::$app->user->identity->getStatus() == 0) ? ['label' => 'Make a purchase', 'url' => ['/site/purchases']] : '',
-            ['label' => 'Products', 'url' => ['/site/products']],
+            (Yii::$app->user->identity->getStatus() == 0) ? ['label' => 'Make a purchase', 'url' => ['purchase/purchases']] : '',
+            ['label' => 'Products', 'url' => ['/product/index']],
             ['label' => 'Contact', 'url' => ['/site/contact']],
-            '<li>'.Html::a('<span class="glyphicon glyphicon-shopping-cart"></span> Cart', ['/site/cart']).'</li>',
+            '<li>'.Html::a('<span class="glyphicon glyphicon-shopping-cart"></span> Cart', ['/order/show-cart']).'</li>',
             '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+            . Html::beginForm(['/user/logout'], 'post')
             . Html::submitButton(
                 '<span class="glyphicon glyphicon-log-out"></span> Logout (' . Yii::$app->user->identity->getFirstName() . ')',
                 ['class' => 'btn btn-link logout']
@@ -53,9 +53,9 @@ AppAsset::register($this);
         ];
     } else {
         $menuItems = [
-            ['label' => 'Products', 'url' => ['/site/products']],
-            '<li>'.Html::a('<span class="glyphicon glyphicon-user"></span> Sign Up', ['/site/signup']).'</li>',
-            '<li>'.Html::a('<span class="glyphicon glyphicon-log-in"></span> Login', ['/site/login']).'</li>',
+            ['label' => 'Products', 'url' => ['product/index']],
+            '<li>'.Html::a('<span class="glyphicon glyphicon-user"></span> Sign Up', ['/user/sign-up']).'</li>',
+            '<li>'.Html::a('<span class="glyphicon glyphicon-log-in"></span> Login', ['/user/login']).'</li>',
         ];
     }
 

@@ -13,7 +13,7 @@ use yii\helpers\Html;
 $this->title = "Search";
 $this->params['breadcrumbs'][] = [
         'label' => 'Products',
-        'url' => ['site/products'],
+        'url' => ['product/index'],
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php if($products): ?>
         <table id="table_prod" class="table table-bordered">
             <?php for($i = 0; $i < count($products); $i++) : ?>
-                <?= Html::beginForm();?>
+                <?= Html::beginForm(['order/add-cart']);?>
                 <tr class="h4">
                     <?php if($products[$i]->getMark()) : ?>
                         <td class="col-xs-1 text-center"><?= Html::img($products[$i]->getMark()->getImgPath(), [

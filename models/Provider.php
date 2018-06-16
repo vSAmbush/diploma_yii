@@ -30,6 +30,13 @@ class Provider extends ActiveRecord
     }
 
     /**
+     * @return int
+     */
+    public function getId() {
+        return $this->id;
+    }
+
+    /**
      * @return string
      */
     public function getOrgName() {

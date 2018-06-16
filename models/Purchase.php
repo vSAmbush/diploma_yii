@@ -82,6 +82,13 @@ class Purchase extends ActiveRecord
     }
 
     /**
+     * @return integer
+     */
+    public function getUpdatedAt() {
+        return $this->updated_at;
+    }
+
+    /**
      * @return User
      */
     public function getUser()

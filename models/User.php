@@ -129,6 +129,20 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface
     }
 
     /**
+     * @return integer
+     */
+    public function getCreatedAt() {
+        return $this->created_at;
+    }
+
+    /**
+     * @return integer
+     */
+    public function getUpdatedAt() {
+        return $this->updated_at;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function validateAuthKey($authKey)

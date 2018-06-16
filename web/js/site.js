@@ -42,7 +42,7 @@ $(document).ready(function () {
         str = str.replace('Total:', '');
     var total = parseFloat(str);
 
-
+    //plussing items for adding to cart
     $('.counter-plus').click(function () {
        var ind = $(this).attr('id');
        ind = ind.replace('counter-plus', '');
@@ -53,16 +53,15 @@ $(document).ready(function () {
        $(temp).html(cost[ind] * count[ind] + " $");
        total += cost[ind];
        $('#total').html("Total: " + total + " $");
-       $('#total_input').val(total);
     });
 
+    //subtracting items for adding to cart
     $('.counter-minus').click(function () {
         var ind = $(this).attr('id');
         ind = ind.replace('counter-minus', '');
         if(count[ind] > 1) {
             total -= cost[ind];
             $('#total').html("Total: " + total + " $");
-            $('#total_input').val(total);
         }
         count[ind]--;
         if(count[ind] <= 1)

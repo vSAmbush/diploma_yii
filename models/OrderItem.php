@@ -15,6 +15,8 @@ class OrderItem extends ActiveRecord
 {
     public $product;
 
+    public $user;
+
     /**
      * @return string
      */
@@ -23,17 +25,7 @@ class OrderItem extends ActiveRecord
         return "order_item";
     }
 
-    /**
-     * Validation rules
-     *
-     * @return array
-     */
-    public function rules()
-    {
-        return [
-          ['id_product', 'unique'],
-        ];
-    }
+
 
     /**
      * @param $id
@@ -52,7 +44,7 @@ class OrderItem extends ActiveRecord
      * @return null|static
      */
     public static function isRowExists($id_product) {
-        return self::findOne(['id_product' => $id_product]);
+        return self::findOne(['id_product' => $id_product, 'status' => 0]);
     }
 
     /**
@@ -92,7 +84,10 @@ class OrderItem extends ActiveRecord
      * @param $id_user
      */
     public static function clearCart($id_user) {
-        self::deleteAll(['id_user' => $id_user]);
+        self::deleteAll([
+            'id_user' => $id_user,
+            'status' => 0,
+        ]);
     }
 
     /**
@@ -142,5 +137,12 @@ class OrderItem extends ActiveRecord
      */
     public function getStatus() {
         return $this->status;
+    }
+
+    /**
+     * @return User
+     */
+    public function getUser() {
+        return $this->user;
     }
 }

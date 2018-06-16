@@ -13,32 +13,30 @@ use yii\helpers\Html;
 $this->title = 'Products';
 $this->params['breadcrumbs'][] = [
         'label' => 'Products',
-        'url' => ['site/products'],
+        'url' => ['product/index'],
 ];
 ?>
 <div class="site-about">
     <h1><?= Html::encode($this->title) ?></h1>
 
     <?php if(!$product_viewer->isMarkSelected && !$product_viewer->isOtherSelected): ?>
-        <?= Html::beginForm('', 'post', [
+        <?= Html::beginForm(['product/search'], 'get', [
                 'class' => 'panel',
         ]); ?>
             <div class="form-group no-padding">
                 <div class="col-xs-11">
-                    <?= Html::textInput('search', '', [
+                    <?= Html::textInput('code', '', [
                         'class' => 'form-control',
                         'placeholder' => 'Enter the detail code',
                     ]); ?>
                 </div>
                 <?= Html::submitButton('<span class="glyphicon glyphicon-search"></span>', [
-                        'value' => 'search',
-                        'name' => 'search_submit',
                         'class' => 'col-xs-1 btn btn-default',
                 ])?>
             </div>
         <?= Html::endForm(); ?><br>
         <?php for($i = 0; $i < count($others); $i++): ?>
-            <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['site/products', 'other' => $others[$i]->getId()]);?>">
+            <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['product/index', 'other' => $others[$i]->getId()]);?>">
                 <?= Html::img($src.$others[$i]->getImgPath(), [
                     'width' => '50px',
                     'height' => '50px',
@@ -48,7 +46,7 @@ $this->params['breadcrumbs'][] = [
         <?php endfor; ?>
         <br/><br/>
         <?php for($i = 0; $i < count($marks); $i++) : ?>
-            <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['site/products', 'mark' => $marks[$i]->getId()]);?>">
+            <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['product/index', 'mark' => $marks[$i]->getId()]);?>">
                 <?= Html::img($src.$marks[$i]->getImgPath(), [
                     'width' => '150px',
                     'height' => '150px',
@@ -62,13 +60,13 @@ $this->params['breadcrumbs'][] = [
                 $this->params['breadcrumbs'][] = [
                     'label' => 'Types ('.$product_viewer->getNameMarkById($product_viewer->currentMark).')',
                     'url' => [
-                        'site/products',
+                        'product/index',
                         'mark' => $product_viewer->currentMark
                     ],
                 ];
             if(!$product_viewer->isTypeSelected && !$product_viewer->isOtherSelected):
                 for($i = 0; $i < count($types); $i++) : ?>
-                    <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['site/products', 'mark' => $product_viewer->currentMark, 'type' => $types[$i]->getId()]);?>">
+                    <a class="btn btn-default" href="<?= \yii\helpers\Url::to(['product/index', 'mark' => $product_viewer->currentMark, 'type' => $types[$i]->getId()]);?>">
                         <?= Html::img($src.$types[$i]->getImgPath(), [
                             'width' => '150px',
                             'height' => '150px',
@@ -81,7 +79,7 @@ $this->params['breadcrumbs'][] = [
                 $this->params['breadcrumbs'][] = $product_viewer->getNameTypeById($product_viewer->currentType); ?>
                 <table id="table_prod" class="table table-bordered">
                 <?php for($i = 0; $i < count($products); $i++) : ?>
-                        <?= Html::beginForm();?>
+                        <?= Html::beginForm(['order/add-cart']);?>
                             <tr class="h4">
                                 <td class="col-md-1 bg-info">Code:</td>
                                 <td class="col-md-2"><?= $products[$i]->getCode(); ?></td>

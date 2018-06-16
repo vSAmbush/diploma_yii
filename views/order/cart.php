@@ -6,7 +6,7 @@
  * Time: 13:34
  */
 /* @var $this \yii\web\View */
-/* @var $order_items \app\models\Cart[]|array|\yii\db\ActiveRecord[] */
+/* @var $order_items \app\models\OrderItem[]|array|\yii\db\ActiveRecord[] */
 /* @var $total int|mixed */
 
 use yii\helpers\Html;
@@ -14,7 +14,7 @@ use yii\helpers\Html;
 $this->title = "Cart";
 $this->params['breadcrumbs'][] = [
         'label' => 'Products',
-        'url' => ['site/products'],
+        'url' => ['product/index'],
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php if($order_items) : ?>
         <div class="panel pull-right">
-            <?= Html::beginForm(); ?>
+            <?= Html::beginForm(['order/clear-cart']); ?>
                 <?= Html::submitButton('Clear cart', [
                     'class' => 'btn btn-danger',
                     'name' => 'clear',
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::endForm(); ?>
         </div>
         <!-- Cart -->
-        <?= Html::beginForm(); ?>
+        <?= Html::beginForm(['order/checkout']); ?>
             <table id="table_prod" class="table table-bordered">
                 <?php for($i = 0; $i < count($order_items); $i++) : ?>
                         <tr class="h4">
@@ -62,19 +62,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                             </td>
                             <td id="<?= 'td_cost'.$i; ?>" class="col-md-1 bg-danger text-center"><?= $order_items[$i]->getCost(); ?> $</td>
-                            <td class="col-md-1 text-center"><?= Html::submitButton('<span class="glyphicon glyphicon-remove"></span>', [
-                                    'value' => $order_items[$i]->getId(),
+                            <td class="col-md-1 text-center"><?= Html::a('<span class="glyphicon glyphicon-remove"></span>', [
+                                   'order/remove-from-cart',
+                                    'remove' => $order_items[$i]->getId(),
+                                ], [
                                     'class' => 'btn btn-default',
-                                    'name' => 'remove',
                                 ]); ?></td>
                         </tr>
                 <?php endfor; ?>
             </table>
 
-            <p id="total" class="btn btn-info btn-lg disabled pull-right">Total: <?= $total ?> $</p>
-            <?= Html::hiddenInput('total_input', $total, [
-                    'id' => 'total_input',
-                ]);?>
+        <p id="total" class="btn btn-info btn-lg disabled pull-right">Total: <?= $total ?> $</p>
+
             <!-- Checkout -->
             <br><br><br>
             <div class="panel pull-right">
