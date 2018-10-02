@@ -132,6 +132,7 @@ class OrderController extends Controller
             return $this->render('cart', [
                 'order_items' => $this->order_items,
                 'total' => $total,
+                'src' => Yii::$app->params['img_src'],
             ]);
         } else {
             return $this->redirect(['user/login']);

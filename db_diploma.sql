@@ -86,7 +86,7 @@ foreign key (id_user) references users (id))
 engine = InnoDB; 
 
 insert into users (username, first_name, second_name, email, password_hash, auth_key, status, created_at, updated_at)
-value ('admin', 'admin', 'admin', 'vovan19977@gmail.com', 'd033e22ae348aeb5660fc2140aec35850c4da997',
+values ('admin', 'admin', 'admin', 'vovan19977@gmail.com', 'd033e22ae348aeb5660fc2140aec35850c4da997',
 	'xRZSiba_yzHDXfJKX23OxvqAZhWAV2aV', 0, 1524234881, 1524234881),
 ('vovchai', 'Vladimir', 'Ryashentsev', 'vovan19977@mail.ru', '8cb2237d0679ca88db6464eac60da96345513964',
  'bDNYLQf-lKArYNIyDkwyoGLcY6sVeNgZ', 1, 1528009367, 1528009367);

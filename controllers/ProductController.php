@@ -49,6 +49,7 @@ class ProductController extends Controller
 
         return $this->render('search', [
             'products' => $products,
+            'src' => Yii::$app->params['img_src'],
         ]);
     }
 }
