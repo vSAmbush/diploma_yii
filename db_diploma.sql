@@ -74,13 +74,13 @@ engine = InnoDB;
 create table purchases (id int primary key auto_increment,
 id_user int,
 purchase_number int,
-id_order int,
+id_order_item int,
 id_provider int,
 cost float,
 created_at long,
 updated_at long,
 status int,
-foreign key (id_order) references orders (id),
+foreign key (id_order_item) references order_item (id),
 foreign key (id_provider) references providers (id),
 foreign key (id_user) references users (id))
 engine = InnoDB; 

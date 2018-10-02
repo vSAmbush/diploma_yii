@@ -36,11 +36,11 @@ $this->title = 'Diploma';
 
     <div class="form-group text-center">
 
-        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('Login', ['site/login'], ['class' => 'btn btn-primary btn-lg']) : '' ?>
+        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('Login', ['user/login'], ['class' => 'btn btn-primary btn-lg']) : '' ?>
 
-        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('Sing Up', ['site/signup'], ['class' => 'btn btn-success btn-lg']) : ''; ?>
+        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('Sing Up', ['user/sign-up'], ['class' => 'btn btn-success btn-lg']) : ''; ?>
 
-        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('View products', ['site/products'], ['class' => 'btn btn-default btn-lg']) :
+        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('View products', ['product/index'], ['class' => 'btn btn-default btn-lg']) :
             \yii\helpers\Html::a('View products', ['site/products'], ['class' => 'btn btn-success btn-lg']); ?>
     </div>
 </div>
