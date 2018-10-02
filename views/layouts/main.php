@@ -19,8 +19,8 @@ AppAsset::register($this);
     <meta charset="<?= Yii::$app->charset ?>">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="/web/favicon.ico" type="image/x-icon">
     <?php $this->registerCsrfMetaTags() ?>
+    <?php $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/png', 'href' => Yii::$app->params['img_src'].'/favicon.ico']) ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
 </head>
