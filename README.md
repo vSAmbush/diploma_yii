@@ -1,4 +1,4 @@
-<h1>You can to use this site by following link:</h1>
+<h1>You can use this site by following link:</h1>
 
 [click here](http://diplomabachalor.zzz.com.ua/)
 
