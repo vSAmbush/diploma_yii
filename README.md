@@ -1,4 +1,6 @@
-<h1>You can to use this site by following link:</h1>[click here](http://diplomabachalor.zzz.com.ua)
+<h1>You can to use this site by following link:</h1>
+
+[click here](http://diplomabachalor.zzz.com.ua/)
 
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
