@@ -1,3 +1,7 @@
+<h1>You can use this site by following link:</h1>
+
+[click here](http://diplomabachalor.zzz.com.ua/)
+
 <p align="center">
     <a href="https://github.com/yiisoft" target="_blank">
         <img src="https://avatars0.githubusercontent.com/u/993323" height="100px">
