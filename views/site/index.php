@@ -1,5 +1,7 @@
 <?php
 
+use yii\helpers\Html;
+
 /* @var $this yii\web\View */
 /* @var $src mixed */
 
@@ -16,13 +18,13 @@ $this->title = 'Diploma';
 
                 for($i = 0; $i < 3; $i++) {
                     if($i === 1)
-                        echo \yii\helpers\Html::img($src.'/images/gear'.$i.'.png', [
+                        echo Html::img($src.'/images/gear'.$i.'.png', [
                                 'width' => '20%',
                                 'height' => '20%',
                                 'class' => 'gear-left'
                             ]).' ';
                     else
-                        echo \yii\helpers\Html::img($src.'/images/gear'.$i.'.png', [
+                        echo Html::img($src.'/images/gear'.$i.'.png', [
                             'width' => '20%',
                             'height' => '20%',
                             'class' => 'gear-right'
@@ -36,11 +38,11 @@ $this->title = 'Diploma';
 
     <div class="form-group text-center">
 
-        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('Login', ['user/login'], ['class' => 'btn btn-primary btn-lg']) : '' ?>
+        <?= Yii::$app->user->isGuest ? Html::a('Login', ['user/login'], ['class' => 'btn btn-primary btn-lg']) : '' ?>
 
-        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('Sing Up', ['user/sign-up'], ['class' => 'btn btn-success btn-lg']) : ''; ?>
+        <?= Yii::$app->user->isGuest ? Html::a('Sing Up', ['user/sign-up'], ['class' => 'btn btn-success btn-lg']) : ''; ?>
 
-        <?= Yii::$app->user->isGuest ? \yii\helpers\Html::a('View products', ['product/index'], ['class' => 'btn btn-default btn-lg']) :
-            \yii\helpers\Html::a('View products', ['site/products'], ['class' => 'btn btn-success btn-lg']); ?>
+        <?= Yii::$app->user->isGuest ? Html::a('View products', ['product/index'], ['class' => 'btn btn-default btn-lg']) :
+            Html::a('View products', ['product/index'], ['class' => 'btn btn-success btn-lg']); ?>
     </div>
 </div>
